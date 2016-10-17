@@ -11,12 +11,14 @@ TARGET_SOC := exynos8890
 
 TARGET_BUILD_VARIANT := eng
 
+TARGET_BOARD_PLATFORM_GPU := mali-t880mp12 
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=armeabi
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a53
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
 TARGET_2ND_CPU_ABI := armeabi-v7a
@@ -25,7 +27,7 @@ TARGET_2ND_CPU_VARIANT := cortex-a53
 
 ENABLE_CPUSETS := true
 
-WITH_DEXPREOPT := true
+#WITH_DEXPREOPT := true
 
 # Renderscript
 BOARD_OVERRIDE_RS_CPU_VARIANT_32 := cortex-a53
@@ -48,16 +50,22 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+BOARD_CUSTOM_BOOTIMG_MK :=  $(LOCAL_PATH)/bootimg.mk
 #BOARD_CUSTOM_BOOTIMG_MK := device/samsung/hero2ltexx/mkdtbhbootimg.mk
 #BOARD_CUSTOM_MKBOOTIMG := mkdtbhbootimg
 #BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x11000000 --tags_offset 0x10000100
 #BOARD_MKBOOTIMG_ARGS += --dt_dir $(OUT)/obj/KERNEL_OBJ/arch/arm/boot/dts/
-BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x10008000 --ramdisk_offset 0x11000000 --tags_offset 0x10000100 --dt device/samsung/$(TARGET_DEVICE)/dt.img
+#BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x10008000 --ramdisk_offset 0x11000000 --tags_offset 0x10000100 --dt device/samsung/$(TARGET_DEVICE)/dt.img
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --board SRPOI30A000KU
 TARGET_KERNEL_SOURCE := kernel/samsung/exynos8890
 TARGET_KERNEL_CONFIG := exynos8890-hero2lte_defconfig
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
+TARGET_DTBH_PLATFORM_CODE := 0x000050a6
+TARGET_DTBH_SUBTYPE_CODE  := 0x217584da
 TARGET_USES_UNCOMPRESSED_KERNEL := true
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/Image
+TARGET_PREBUILT_DTB := $(LOCAL_PATH)/dtb.img
 
 # Partitions
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -73,11 +81,30 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 ##TWRP
 #Uncomment this to build TWRP
 #~ RECOVERY_VARIANT := twrp
+# TWRP specific build flags
+#~ TW_THEME := portrait_hdpi
+#~ RECOVERY_SDCARD_ON_DATA := true
+#~ TARGET_RECOVERY_PIXEL_FORMAT := "ABGR_8888"
+#~ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/15400000.usb/15400000.dwc3/gadget/lun%d/file"
+#~ TW_BRIGHTNESS_PATH := "/sys/devices/13900000.dsim/backlight/panel/brightness"
+#~ TW_MAX_BRIGHTNESS := 255
+#~ TW_DEFAULT_BRIGHTNESS := 162
 #~ TW_NO_REBOOT_BOOTLOADER := true
 #~ TW_HAS_DOWNLOAD_MODE := true
-#~ TW_THEME := portrait_hdpi
-#~ TW_BRIGHTNESS_PATH := /sys/class/backlight/panel/brightness
-#~ TW_MAX_BRIGHTNESS := 255
+#~ TW_INCLUDE_NTFS_3G := true
+#~ # exFAT drivers included in the kernel
+#~ TW_NO_EXFAT_FUSE := true
+#~ # No love for the wicked (device ships with M)
+#~ TW_EXCLUDE_SUPERSU := true
+
+#~ # Encryption support
+#~ TW_INCLUDE_CRYPTO := true
+#~ # Samsung's encryption is currently unsupported
+#~ #TW_INCLUDE_CRYPTO_SAMSUNG := true
+#~ #TARGET_HW_DISK_ENCRYPTION := true
+
+#~ # Asian region languages
+#~ TW_EXTRA_LANGUAGES := true
 
 # Recovery
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -134,11 +161,11 @@ BOARD_NEEDS_MEMORYHEAPION := true
 EXYNOS5_ENHANCEMENTS := true
 
 ifdef EXYNOS5_ENHANCEMENTS
-COMMON_GLOBAL_CFLAGS += -DEXYNOS5_ENHANCEMENTS
+TARGET_GLOBAL_CFLAGS += -DEXYNOS5_ENHANCEMENTS
 endif
 
-# Samsung LSI OpenMAX
-COMMON_GLOBAL_CFLAGS += -DUSE_NATIVE_SEC_NV12TILED
+#~ # Samsung LSI OpenMAX
+TARGET_GLOBAL_CFLAGS += -DUSE_NATIVE_SEC_NV12TILED
 
 # HDMI
 BOARD_HDMI_INCAPABLE := true
