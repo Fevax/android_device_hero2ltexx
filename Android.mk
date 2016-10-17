@@ -18,6 +18,8 @@ LOCAL_PATH := $(call my-dir)
 
 ifeq ($(TARGET_DEVICE),hero2ltexx)
 
+TARGET_PRODUCT := hero2ltexx
+
 include $(CLEAR_VARS)
 
 ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
